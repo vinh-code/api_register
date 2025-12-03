@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 
-const API_BASE = import.meta.env.VITE_API_BASE?.replace(/\/$/, '') || 'http://localhost:3000';
+const API_BASE = import.meta.env.VITE_API_BASE?.replace(/\/$/, '') || `${process.env.REACT_APP_API_BASE}`;
 
 const registerUser = async ({ email, password }) => {
   const response = await fetch(`${API_BASE}/user/register`, {

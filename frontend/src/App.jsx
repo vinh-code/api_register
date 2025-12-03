@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
@@ -13,16 +13,22 @@ function PublicRoute({ children }) {
   return !isLoggedIn ? children : <Navigate to="/" replace />;
 }
 
+function HomeWrapper() {
+  const navigate = useNavigate();
+  
+  const handleLogout = () => {
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('user');
+    navigate('/login', { replace: true });
+  };
+
+  return <Home onLogout={handleLogout} />;
+}
+
 function App() {
   const handleLoginSuccess = (userData) => {
     localStorage.setItem('isLoggedIn', 'true');
     localStorage.setItem('user', JSON.stringify(userData));
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('user');
-    window.location.href = '/login';
   };
 
   return (
@@ -32,7 +38,7 @@ function App() {
           path="/" 
           element={
             <PrivateRoute>
-              <Home onLogout={handleLogout} />
+              <HomeWrapper />
             </PrivateRoute>
           } 
         />
